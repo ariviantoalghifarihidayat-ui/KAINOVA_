@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kainova — From Textile to Tomorrow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#22402b;
+    --forest-2:#2c4d34;
+    --sage:#7f9d6e;
+    --sage-2:#8fae7c;
+    --plaid-bg:#cfdcb8;
+    --plaid-line:#e4edd4;
+    --cream:#f7f1e2;
+    --cream-2:#fbf7ec;
+    --ink:#1e2a20;
+    --muted:#5b6b57;
+    --tan:#a99a7f;
+    --danger:#b4553f;
+    --radius-lg:26px;
+    --radius-md:18px;
+    --radius-sm:12px;
+    --shadow-soft:0 10px 28px rgba(34,64,43,0.12);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 10%, #2c4d34 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, #365c3f 0%, transparent 45%),
+      #1a2c1f;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 16px;
+  }
+  h1,h2,h3,h4{font-family:'Baloo 2',sans-serif; margin:0;}
+
+  /* ===== Desktop chrome around the phone ===== */
+  .stage{
+    display:flex;
+    align-items:center;
+    gap:56px;
+    max-width:1100px;
+    width:100%;
+  }
+  .brand-side{
+    color:var(--cream-2);
+    max-width:360px;
+    flex:1;
+  }
+  /* Logo dibuat lebih kontras agar tidak menyatu dengan background hijau */
+  .brand-side img.logo{
+    width:220px;
+    display:block;
+    margin-bottom:28px;
+    padding:12px 18px;
+    background:rgba(255,255,255,.94);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:18px;
+    filter:drop-shadow(0 8px 16px rgba(0,0,0,.28));
+  }
+  .brand-side h1{font-size:34px; line-height:1.15; color:#fff; margin-bottom:14px;}
+  .brand-side p{font-size:15px; line-height:1.6; color:#cbd9c2; margin-bottom:26px;}
+  .brand-side .pill-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .brand-side .pill{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+    color:#e7efdd;
+    font-size:12.5px;
+    font-weight:600;
+    padding:8px 14px;
+    border-radius:999px;
+  }
+
+  /* ===== Device frame ===== */
+  .device-wrap{
+    position:relative;
+    flex-shrink:0;
+  }
+  .device-frame{
+    width:390px;
+    height:820px;
+    background:var(--plaid-bg);
+    border-radius:44px;
+    border:10px solid #101a12;
+    box-shadow:var(--shadow-soft), 0 30px 60px rgba(0,0,0,0.45);
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .notch{
+    position:absolute;
+    top:0; left:50%; transform:translateX(-50%);
+    width:150px; height:26px;
+    background:#101a12;
+    border-radius:0 0 18px 18px;
+    z-index:50;
+  }
+  .plaid{
+    background-image:
+      repeating-linear-gradient(0deg, var(--plaid-line) 0 2px, transparent 2px 34px),
+      repeating-linear-gradient(90deg, var(--plaid-line) 0 2px, transparent 2px 34px);
+    background-color:var(--plaid-bg);
+  }
+  .screens{
+    flex:1 1 auto;
+    min-height:0;
+    position:relative;
+    overflow:hidden;
+  }
+  .screen{
+    position:absolute;
+    inset:0;
+    display:none;
+    flex-direction:column;
+    min-height:0;
+    overflow:hidden;
+  }
+  .screen.active{display:flex;}
+
+  /* Halaman tanpa bottom navigation tetap boleh scroll penuh */
+  #screen-login,
+  #screen-verify{
+    overflow-y:auto;
+    -ms-overflow-style:none;
+    scrollbar-width:none;
+  }
+  #screen-login::-webkit-scrollbar,
+  #screen-verify::-webkit-scrollbar{display:none;}
+
+  /* ===== Shared bits ===== */
+  .status-bar{
+    height:34px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 22px; font-size:13px; font-weight:700; color:var(--ink);
+  }
+  .topbar{
+    background:linear-gradient(180deg, var(--forest-2), var(--sage));
+    color:#fff;
+    padding:34px 22px 24px;
+    flex-shrink:0;
+    position:relative;
+  }
+  .topbar h2{font-size:24px; font-weight:800; text-align:center;}
+  .topbar .with-back{display:flex; align-items:center; gap:12px;}
+  .back-btn{
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,0.15);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff; font-size:18px; cursor:pointer; border:none;
+  }
+  .body-scroll{
+    padding:20px 20px 28px;
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    -ms-overflow-style:none;
+    scrollbar-width:none;
+  }
+  .body-scroll::-webkit-scrollbar{display:none;}
+
+  .field-label{font-weight:700; font-size:13.5px; color:var(--forest); margin:0 0 6px 2px;}
+  .input{
+    width:100%;
+    background:var(--cream-2);
+    border:none;
+    border-radius:999px;
+    padding:15px 20px;
+    font-size:14.5px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    color:var(--ink);
+    outline:none;
+  }
+  .input::placeholder{color:#a6ad9d; font-weight:500;}
+  .btn{
+    width:100%;
+    border:none;
+    border-radius:999px;
+    padding:15px 18px;
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:16px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .btn-primary{background:var(--cream-2); color:var(--forest);}
+  .btn-dark{background:var(--forest); color:#fff;}
+  .btn-outline{background:transparent; border:2px solid var(--forest); color:var(--forest);}
+  .btn-sage{background:var(--sage); color:#fff;}
+  .link{color:var(--forest); font-weight:700; text-decoration:none; font-size:14px;}
+
+  .card{
+    background:var(--cream-2);
+    border-radius:var(--radius-md);
+    padding:18px;
+    box-shadow:0 6px 14px rgba(34,64,43,0.08);
+  }
+
+  /* ===== Bottom nav ===== */
+  .bottom-nav{
+    position:relative;
+    width:100%;
+    height:78px;
+    flex:0 0 78px;
+    background:linear-gradient(180deg, var(--sage), var(--forest-2));
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 14px 18px;
+    z-index:40;
+  }
+  .nav-item{
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    color:rgba(255,255,255,0.75);
+    font-size:10.5px; font-weight:700;
+    background:none; border:none; cursor:pointer;
+    font-family:'Inter',sans-serif;
+  }
+  .nav-item.active{color:#fff;}
+  .nav-item svg{width:20px;height:20px;}
+  .nav-fab{
+    width:54px;height:54px;border-radius:50%;
+    background:var(--cream-2);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 14px rgba(0,0,0,0.25);
+    margin-top:-26px;
+    border:4px solid var(--sage-2);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .nav-fab svg{width:24px;height:24px;color:var(--forest);}
+
+  /* ===== Login / verify ===== */
+  .auth-hero{padding:30px 24px 10px; text-align:center;}
+  .auth-hero img{width:150px; margin-bottom:10px; mix-blend-mode:multiply;}
+  .auth-hero h1{font-size:30px; color:var(--forest); line-height:1.15;}
+  .auth-form{padding:20px 24px 130px; display:flex; flex-direction:column; gap:16px;}
+  .pw-wrap{position:relative;}
+  .pw-wrap .input{padding-right:48px;}
+  .eye-toggle{
+    position:absolute; right:16px; top:50%; transform:translateY(-50%);
+    background:none;border:none;cursor:pointer;color:var(--forest);opacity:.7;
+  }
+  .row-between{display:flex; justify-content:flex-end;}
+  .divider-text{text-align:center; font-size:13.5px; color:var(--muted); margin:6px 0;}
+
+  .verify-top{padding:36px 24px 20px; text-align:center;}
+  .verify-top h3{color:var(--forest); font-size:20px; margin-bottom:22px;}
+  .verify-top img{width:150px; mix-blend-mode:multiply;}
+  .verify-panel{
+    background:linear-gradient(180deg, var(--sage), var(--forest-2));
+    border-radius:34px 34px 0 0;
+    flex:1;
+    padding:38px 26px 60px;
+    text-align:center;
+    color:#fff;
+  }
+  .verify-panel h2{font-size:26px; margin-bottom:16px;}
+  .verify-panel p{font-size:14px; color:#e4ecdc; line-height:1.5; margin-bottom:26px;}
+  .otp-row{display:flex; gap:12px; justify-content:center; margin-bottom:22px;}
+  .otp-box{
+    width:56px;height:60px; border-radius:14px; border:none;
+    background:var(--cream-2); text-align:center; font-size:22px; font-weight:800;
+    color:var(--forest); font-family:'Baloo 2',sans-serif;
+  }
+  .resend{color:#fff; font-size:13px; text-decoration:underline; display:block; margin-bottom:22px; cursor:pointer; background:none; border:none; font-weight:700;}
+  .verify-panel .btn{max-width:220px; margin:0 auto; border:2px solid #fff; background:transparent; color:#fff;}
+
+  /* ===== Dashboard ===== */
+  .dash-head{
+    background:var(--sage);
+    border-radius:22px;
+    color:#173420;
+    padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .dash-head h2{font-size:20px; color:#173420;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:10px;
+    background:#3b62c9; color:#fff;
+    display:flex;align-items:center;justify-content:center; margin-left:8px;
+  }
+  .hello{margin-bottom:16px;}
+  .hello h3{font-size:21px; color:var(--ink);}
+  .hello span{font-weight:700; font-size:13px; color:var(--forest); letter-spacing:.3px;}
+  .impact-card{
+    background:var(--sage-2);
+    border-radius:22px;
+    padding:18px;
+    display:flex; align-items:center; justify-content:space-between;
+    color:#153018;
+    margin-bottom:18px;
+  }
+  .impact-card h3{font-size:19px; margin-bottom:4px;}
+  .impact-card p{font-size:13px; margin:0 0 8px; opacity:.85;}
+  .impact-card a{color:#123219; font-weight:700; font-size:13px;}
+  .impact-card img{width:78px; mix-blend-mode:multiply;}
+  .search-row{display:flex; gap:10px; margin-bottom:14px;}
+  .search-row .input{flex:1; background:#fff;}
+  .filter-btn{
+    width:48px;flex-shrink:0;border-radius:14px;background:#3b62c9;color:#fff;
+    display:flex;align-items:center;justify-content:center;border:none;
+  }
+  .chip-row{display:flex; gap:8px; overflow-x:auto; margin-bottom:16px; padding-bottom:4px;}
+  .chip{
+    flex-shrink:0; padding:9px 16px; border-radius:999px; font-size:12.5px; font-weight:700;
+    background:#e4ecd6; color:var(--forest); cursor:pointer; border:none;
+  }
+  .chip.active{background:var(--sage); color:#fff;}
+  .list-card{
+    background:#fff; border-radius:18px; padding:14px; display:flex; gap:14px; align-items:center;
+    margin-bottom:12px; box-shadow:0 4px 10px rgba(34,64,43,0.06);
+  }
+  .list-card img{width:74px;height:74px;border-radius:14px;object-fit:cover; flex-shrink:0;}
+  .list-card h4{font-size:15px; margin-bottom:4px;}
+  .list-card p{font-size:12.5px; color:var(--muted); margin:0 0 6px;}
+  .list-card .see{font-size:12.5px; font-weight:700; color:var(--forest); display:flex; align-items:center; gap:4px; background:none; border:none; cursor:pointer;}
+
+  /* ===== Explore Materials ===== */
+  .explore-top{
+    background:var(--sage); border-radius:0 0 30px 30px; padding:16px 20px 26px; color:#123219;
+  }
+  .explore-top h2{font-size:26px; display:flex; justify-content:space-between; align-items:center; color:#123219;}
+  .explore-search{
+    background:#fff; border-radius:16px; padding:14px 16px; margin-top:14px;
+    display:flex; align-items:center; justify-content:space-between; font-size:13px; color:var(--muted); gap:10px;
+  }
+  .cat-section{background:#fff; border-radius:0 0 26px 26px; margin:0 -20px; padding:18px 20px 22px;}
+  .cat-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  .cat-head h3{font-size:16px;}
+  .cat-head a{font-size:12.5px; color:var(--muted); font-weight:600;}
+  .cat-grid{display:flex; gap:10px; overflow-x:auto;}
+  .cat-item{
+    flex-shrink:0; width:88px; height:104px; text-align:center; border-radius:16px;
+    padding:10px 8px 10px; color:#fff; cursor:pointer; position:relative; overflow:hidden;
+    background-size:cover; background-position:center;
+    display:flex; flex-direction:column; justify-content:flex-end;
+  }
+  .cat-item::before{content:'';position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,40,25,0.15) 0%, rgba(15,30,18,0.85) 100%);}
+  .cat-item .cat-ic{position:relative; z-index:2; width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.22); display:flex;align-items:center;justify-content:center; margin:0 auto 6px;}
+  .cat-item .cat-ic svg{width:14px;height:14px;}
+  .cat-item span{position:relative; z-index:2; font-size:10.5px; font-weight:700; display:block;}
+  .feature-banner{
+    margin:18px 0; border-radius:20px; overflow:hidden; position:relative; height:140px;
+    background:linear-gradient(0deg, rgba(10,20,12,0.88), rgba(10,20,12,0.15)),
+      url('https://images.unsplash.com/photo-1620641622170-be5da09c47c9?w=800&q=70');
+    background-size:cover; background-position:center;
+    display:flex; align-items:flex-end; padding:16px;
+  }
+  .feature-banner h4{color:#fff; font-size:19px; margin-bottom:4px;}
+  .feature-banner p{color:#d9e4cc; font-size:12px; margin:0;}
+  .collection-head{display:flex; align-items:center; gap:8px; background:#fff; border-radius:999px; padding:12px 16px; font-weight:700; color:var(--forest); font-size:13.5px; margin-bottom:12px; box-shadow:0 4px 10px rgba(34,64,43,0.06);}
+  .mat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;}
+  .mat-card{background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 10px rgba(34,64,43,0.06); cursor:pointer;}
+  .mat-thumb{height:96px; position:relative; background-size:cover; background-position:center;}
+  .mat-tag{position:absolute; top:8px; left:8px; background:var(--forest); color:#fff; font-size:9.5px; font-weight:700; padding:3px 8px; border-radius:999px;}
+  .mat-heart{position:absolute; top:6px; right:6px; width:26px;height:26px;border-radius:50%;background:#fff; display:flex;align-items:center;justify-content:center; cursor:pointer;}
+  .mat-info{padding:10px 12px 14px;}
+  .mat-info h5{font-size:12.5px; margin-bottom:2px;}
+  .mat-info p{font-size:11px; color:var(--muted); margin:0;}
+  .built-banner{
+    background:linear-gradient(180deg, rgba(255,255,255,0.55), rgba(200,220,235,0.75)),
+      url('https://images.unsplash.com/photo-1585914924626-15b0dfb6357a?w=800&q=70');
+    background-size:cover; background-position:center;
+    border-radius:20px; padding:34px 20px; text-align:center; color:#153018;
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:18px; margin-bottom:10px;
+  }
+
+  /* ===== Material Detail ===== */
+  .detail-hero{border-radius:0 0 28px 28px; height:230px; background-size:cover; background-position:center; position:relative; margin-bottom:16px;}
+  .detail-count{position:absolute; top:14px; right:16px; background:rgba(0,0,0,0.55); color:#fff; font-size:11px; padding:3px 10px; border-radius:999px;}
+  .dots{position:absolute; bottom:12px; left:0; right:0; display:flex; justify-content:center; gap:6px;}
+  .dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6);}
+  .dots span:first-child{background:#fff; width:18px; border-radius:4px;}
+  .detail-title-card{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px;}
+  .detail-title-card h2{font-size:24px; color:var(--forest); line-height:1.1; margin-bottom:8px;}
+  .detail-title-card p{font-size:12.5px; color:var(--muted); line-height:1.5;}
+  .detail-title-card img{width:76px; flex-shrink:0; mix-blend-mode:multiply;}
+  .spec-card{margin-bottom:16px;}
+  .spec-card h4{font-size:14px; color:var(--forest); margin-bottom:14px;}
+  .spec-grid{display:grid; grid-template-columns:1fr 1fr; row-gap:16px; column-gap:10px;}
+  .spec-item{display:flex; align-items:center; gap:10px;}
+  .spec-item .ic{width:32px;height:32px;border-radius:50%;background:#e4ecd6; display:flex;align-items:center;justify-content:center; flex-shrink:0;}
+  .spec-item .ic svg{width:16px;height:16px;color:var(--forest);}
+  .spec-item b{display:block; font-size:12px; color:var(--forest);}
+  .spec-item span{font-size:12px; color:var(--muted);}
+  .sustain-card{background:#f3e6c8; border-radius:18px; padding:16px; display:flex; align-items:center; gap:14px; margin-bottom:20px;}
+  .sustain-card .ic{width:38px;height:38px;border-radius:50%;background:#dcefcf; display:flex;align-items:center;justify-content:center; flex-shrink:0;}
+  .sustain-card .ic svg{width:20px;height:20px;color:var(--forest);}
+  .sustain-card b{display:block; font-size:13.5px; color:var(--forest); margin-bottom:2px;}
+  .sustain-card p{font-size:11.5px; color:#6b5f3f; margin:0;}
+  .btn-row-icon{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .btn-row-icon svg{width:18px;height:18px;}
+
+  /* ===== Custom order ===== */
+  .stepper-row{display:flex; align-items:center; justify-content:space-between; padding:22px 20px 8px;}
+  .step-circle{
+    width:44px;height:44px;border-radius:14px;background:#fff;color:var(--forest);
+    display:flex;align-items:center;justify-content:center; font-weight:800; font-family:'Baloo 2',sans-serif; font-size:17px;
+  }
+  .step-circle.active{background:var(--forest); color:#fff;}
+  .step-arrow{color:var(--forest); opacity:.6; font-size:14px;}
+  .step-labels{display:flex; justify-content:space-between; padding:0 20px 18px; gap:4px;}
+  .step-labels span{
+    flex:1; text-align:center; font-size:9.5px; font-weight:700; color:var(--forest);
+    background:#a9c893; border-radius:999px; padding:4px 2px;
+  }
+  .co-intro{display:flex; align-items:center; gap:14px; margin-bottom:20px;}
+  .co-intro h3{font-size:19px; color:var(--forest); margin-bottom:6px;}
+  .co-intro p{font-size:12.5px; color:var(--muted); line-height:1.4;}
+  .co-intro img{width:78px; flex-shrink:0; mix-blend-mode:multiply;}
+  .mat-select{
+    background:#fff; border-radius:16px; padding:12px; display:flex; align-items:center; gap:12px; margin-bottom:12px; cursor:pointer;
+    border:2px solid transparent;
+  }
+  .mat-select.selected{border-color:var(--forest);}
+  .mat-select img{width:56px;height:56px;border-radius:12px;object-fit:cover;}
+  .mat-select .txt{flex:1;}
+  .mat-select .txt b{font-size:13.5px; color:var(--forest);}
+  .mat-select .txt span{font-size:11.5px; color:var(--muted);}
+  .radio-dot{width:22px;height:22px;border-radius:50%;border:2.5px solid var(--forest); flex-shrink:0; position:relative;}
+  .mat-select.selected .radio-dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--forest);}
+  .upload-box{
+    background:#fff; border-radius:20px; padding:44px 20px; text-align:center; margin:8px 0 20px;
+  }
+  .upload-box svg{width:60px;height:60px;color:var(--forest); margin-bottom:16px;}
+  .upload-box h4{font-size:17px; color:var(--forest); margin-bottom:14px;}
+  .upload-box .or{font-size:13px; color:var(--muted); font-weight:700; margin-bottom:14px; display:block;}
+  .upload-box input[type=file]{display:none;}
+  .upload-box label{
+    display:inline-block; background:var(--sage); color:#fff; padding:11px 28px; border-radius:999px; font-weight:700; font-family:'Baloo 2',sans-serif; cursor:pointer; font-size:14px;
+  }
+  .file-name{font-size:12px; color:var(--forest); font-weight:700; margin-top:10px;}
+  .two-btn{display:flex; gap:12px;}
+  .two-btn .btn{flex:1;}
+  .qty-box{background:#fff; border-radius:18px; padding:20px; display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+  .qty-box b{font-size:14px; color:var(--forest);}
+  .qty-controls{display:flex; align-items:center; gap:14px;}
+  .qty-controls button{width:34px;height:34px;border-radius:50%; border:2px solid var(--forest); background:#fff; color:var(--forest); font-size:18px; font-weight:800; cursor:pointer;}
+  .qty-controls span{font-size:18px; font-weight:800; color:var(--forest); min-width:24px; text-align:center; font-family:'Baloo 2',sans-serif;}
+  textarea.input{border-radius:16px; resize:none; height:90px; font-family:'Inter',sans-serif;}
+  .review-row{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #e4ecd6; font-size:13px;}
+  .review-row b{color:var(--forest);}
+  .review-row span{color:var(--muted); text-align:right; max-width:60%;}
+
+  /* ===== Waste dropoff ===== */
+  .waste-banner{background:#fff; border-radius:16px; padding:14px; display:flex; align-items:center; gap:12px; margin-bottom:20px;}
+  .waste-banner svg{width:34px;height:34px;color:var(--forest); flex-shrink:0;}
+  .waste-banner img{width:44px; mix-blend-mode:multiply;}
+  .waste-banner b{font-size:14px; color:var(--forest); line-height:1.25; display:block;}
+  .cloth-chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;}
+  .cloth-chip{padding:10px 18px; border-radius:999px; background:#e4ecd6; color:var(--forest); font-weight:700; font-size:12.5px; cursor:pointer; border:none;}
+  .cloth-chip.active{background:var(--forest); color:#fff;}
+  .map-fake{height:150px; border-radius:16px; margin:10px 0 18px; position:relative; overflow:hidden; background:
+    repeating-linear-gradient(0deg,#e9e4d3 0 1px,transparent 1px 20px),
+    repeating-linear-gradient(90deg,#e9e4d3 0 1px,transparent 1px 20px), #f1ede0;}
+  .map-fake svg.route{position:absolute; inset:0; width:100%; height:100%;}
+
+  /* ===== Order tracking ===== */
+  .track-card{background:#fff; border-radius:18px; padding:16px; display:flex; gap:14px; align-items:center; margin-bottom:18px;}
+  .track-card img{width:72px;height:72px;border-radius:14px;object-fit:cover;}
+  .track-card h4{font-size:14.5px; color:var(--forest); margin-bottom:2px;}
+  .track-card p{font-size:12px; color:var(--muted); margin:0 0 8px;}
+  .track-meta{display:flex; gap:20px; font-size:11.5px; color:var(--muted);}
+  .track-meta b{display:block; color:var(--forest); font-size:13px;}
+  .timeline-card{background:#fff; border-radius:18px; padding:20px; margin-bottom:18px;}
+  .tl-item{display:flex; gap:14px; margin-bottom:22px;}
+  .tl-item:last-child{margin-bottom:0;}
+  .tl-check{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center; flex-shrink:0; background:#dff0d0; color:#4c8f3c;}
+  .tl-check.pending{background:#1e2a20; color:#fff;}
+  .tl-item svg{width:16px;height:16px;}
+  .tl-text b{display:block; font-size:14px; color:var(--forest);}
+  .tl-text span{font-size:11.5px; color:var(--muted);}
+  .notice-pill{background:#fff; border-radius:14px; padding:12px 16px; display:flex; gap:10px; align-items:center; font-size:12px; color:var(--forest); font-weight:600;}
+  .notice-pill svg{width:20px;height:20px; flex-shrink:0;}
+
+  /* ===== Chat ===== */
+  .chat-header-info{display:flex; align-items:center; justify-content:space-between; margin-top:6px;}
+  .chat-header-info .who b{font-size:16px; display:flex; align-items:center; gap:6px;}
+  .chat-header-info .who span{font-size:11.5px; color:#d3e3c7;}
+  .chat-icons{display:flex; gap:14px;}
+  .chat-body{
+    padding:20px 20px 96px;
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    -ms-overflow-style:none;
+    scrollbar-width:none;
+  }
+  .chat-body::-webkit-scrollbar{display:none;}
+  .bubble{max-width:78%; padding:12px 16px; border-radius:18px; font-size:13.5px; line-height:1.4;}
+  .bubble.me{align-self:flex-end; background:var(--forest); color:#fff; border-bottom-right-radius:4px;}
+  .bubble.them{align-self:flex-start; background:#fff; color:var(--ink); border-bottom-left-radius:4px;}
+  .bubble time{display:block; font-size:9.5px; opacity:.65; margin-top:5px; text-align:right;}
+  .bubble.file{display:flex; align-items:center; gap:10px;}
+  .chat-input-bar{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:78px;
+    padding:0 16px;
+    z-index:35;
+  }
+  .chat-input-inner{background:#fff; border-radius:999px; padding:10px 10px 10px 20px; display:flex; align-items:center; gap:10px; box-shadow:0 6px 14px rgba(0,0,0,0.1);}
+  .chat-input-inner input{flex:1; border:none; outline:none; font-size:13.5px; font-family:'Inter',sans-serif;}
+  .chat-input-inner button{background:var(--forest); color:#fff; border:none; width:36px;height:36px;border-radius:50%; display:flex;align-items:center;justify-content:center; cursor:pointer; flex-shrink:0;}
+
+  /* ===== Profile ===== */
+  .profile-hero{text-align:center; padding:26px 20px 10px;}
+  .avatar-wrap{position:relative; width:104px; margin:0 auto 14px;}
+  .avatar-wrap img{width:104px;height:104px;border-radius:50%; object-fit:cover; border:4px solid var(--cream-2);}
+  .avatar-edit{position:absolute; bottom:0; right:0; width:32px;height:32px;border-radius:50%; background:#3b62c9; color:#fff; display:flex;align-items:center;justify-content:center; border:3px solid var(--plaid-bg);}
+  .profile-hero h3{font-size:19px; margin-bottom:4px;}
+  .profile-hero p{font-size:12.5px; color:var(--muted); margin:0;}
+  .section-label{font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; margin:22px 4px 8px;}
+  .settings-row{background:#fff; border-radius:16px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+  .settings-row .left{display:flex; align-items:center; gap:14px;}
+  .settings-row .left .ic{width:34px;height:34px; display:flex;align-items:center;justify-content:center; color:var(--forest);}
+  .settings-row b{font-size:13.5px; color:var(--ink); display:block;}
+  .settings-row span.sub{font-size:11px; color:var(--muted);}
+  .toggle{width:42px;height:24px;border-radius:999px;background:#3b62c9; position:relative; flex-shrink:0;}
+  .toggle::after{content:'';position:absolute; top:3px; left:20px; width:18px;height:18px;border-radius:50%;background:#fff;}
+  .chev{color:var(--muted);}
+
+  /* ===== Responsive: real mobile viewport ===== */
+  @media (max-width:760px){
+    .stage{flex-direction:column; gap:0;}
+    .brand-side{display:none;}
+    body{padding:0; align-items:stretch;}
+  }
+  @media (max-width:480px){
+    body{padding:0;}
+    .device-wrap{width:100%;}
+    .device-frame{
+      width:100%;
+      height:100dvh;
+      border-radius:0;
+      border:none;
+      box-shadow:none;
+    }
+    .screens,
+    .screen{min-height:0;}
+    .bottom-nav{
+      height:78px;
+      flex-basis:78px;
+    }
+    .notch{display:none;}
+    .topbar{padding-top:18px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <div class="brand-side">
+    <img class="logo" src="assets/logo.png" alt="Kainova logo">
+    <h1>Ubah limbah tekstil jadi material masa depan.</h1>
+    <p>Kainova menghubungkan limbah kain dengan desainer &amp; produsen — dari pickup limbah, custom order, sampai tracking produksi, semua dalam satu aplikasi. Ini adalah prototipe interaktif tampilan mobile app-nya.</p>
+    <div class="pill-row">
+      <span class="pill">🧵 Recycled Textile</span>
+      <span class="pill">🌱 Sustainable</span>
+      <span class="pill">📦 Custom Order</span>
+    </div>
+  </div>
+
+  <div class="device-wrap">
+    <div class="device-frame plaid">
+      <div class="notch"></div>
+
+      <div class="screens">
+
+        <!-- ===================== LOGIN ===================== -->
+        <div class="screen active" id="screen-login">
+          <div class="status-bar"><span>07:00</span><span>●●● 5G 🔋</span></div>
+          <div class="auth-hero">
+            <img src="assets/maskot.png" alt="Kainova mascot">
+            <h1>Welcome<br>Back!</h1>
+          </div>
+          <div class="auth-form">
+            <div>
+              <div class="field-label">Email</div>
+              <input class="input" type="email" value="hello@kainova.com">
+            </div>
+            <div>
+              <div class="field-label">Password</div>
+              <div class="pw-wrap">
+                <input class="input" id="pwField" type="password" value="123456">
+                <button class="eye-toggle" onclick="togglePw()">👁</button>
+              </div>
+            </div>
+            <div class="row-between"><a class="link" onclick="go('screen-login')">Lupa Password?</a></div>
+            <button class="btn btn-primary" onclick="go('screen-dashboard')">Login</button>
+            <div class="divider-text">Belum Punya Akun?</div>
+            <button class="btn btn-outline" onclick="go('screen-verify')">Create Account</button>
+          </div>
+        </div>
+
+        <!-- ===================== VERIFY EMAIL ===================== -->
+        <div class="screen" id="screen-verify">
+          <div class="status-bar"><span>07:00</span><span>●●● 5G 🔋</span></div>
+          <div class="verify-top">
+            <h3>Verify Your Email</h3>
+            <img src="assets/maskot.png" alt="Kainova mascot">
+          </div>
+          <div class="verify-panel">
+            <h2>Account<br>Verification</h2>
+            <p>Please enter the 4 digit code<br>sent to your email</p>
+            <div class="otp-row">
+              <input class="otp-box" maxlength="1" value="4">
+              <input class="otp-box" maxlength="1" value="2">
+              <input class="otp-box" maxlength="1" value="0">
+              <input class="otp-box" maxlength="1" value="1">
+            </div>
+            <button class="resend">Resend Code</button>
+            <button class="btn" onclick="go('screen-dashboard')">Verify</button>
+          </div>
+        </div>
+
+        <!-- ===================== DASHBOARD ===================== -->
+        <div class="screen" id="screen-dashboard">
+          <div class="status-bar"><span>07:00</span><span>●●● 5G 🔋</span></div>
+          <div class="body-scroll">
+            <div class="dash-head">
+              <h2>Dashboard</h2>
+              <div style="display:flex;">
+                <div class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/></svg></div>
+                <div class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg></div>
+              </div>
+            </div>
+            <div class="hello">
+              <h3>Hello, Sobat Kainova!</h3>
+              <span>SELAMAT DATANG!</span>
+            </div>
+            <div class="impact-card">
+              <div>
+                <h3>Sustainable Impact</h3>
+                <p>Today's Update!</p>
+                <a href="#" onclick="return false;">Lihat Update →</a>
+              </div>
+              <img src="assets/maskot.png" alt="mascot">
+            </div>
+            <div class="search-row">
+              <input class="input" placeholder="Cari aktivitas atau material...">
+              <button class="filter-btn"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></button>
+            </div>
+            <div class="chip-row">
+              <button class="chip active">All</button>
+              <button class="chip">Limbah Terserap</button>
+              <button class="chip">Pesanan Aktif</button>
+              <button class="chip">Material Tersedia</button>
+            </div>
+            <div class="list-card" onclick="go('screen-waste')">
+              <img src="assets/pickup-limbah.png" alt="">
+              <div style="flex:1;">
+                <h4>Pickup Limbah Tekstil</h4>
+                <p>250 KG berhasil dikumpulkan</p>
+                <button class="see">See Details →</button>
+              </div>
+            </div>
+            <div class="list-card" onclick="go('screen-detail')">
+              <img src="assets/kainpanel-tera.png" alt="">
+              <div style="flex:1;">
+                <h4>KainPanel Terra</h4>
+                <p>Request sample sedang diproses</p>
+                <button class="see">See Details →</button>
+              </div>
+            </div>
+          </div>
+          <div class="bottom-nav" id="nav-dashboard"></div>
+        </div>
+
+        <!-- ===================== EXPLORE MATERIALS ===================== -->
+        <div class="screen" id="screen-explore">
+          <div class="status-bar" style="background:var(--sage); color:#123219;"><span>07:00</span><span>●●● 5G 🔋</span></div>
+          <div class="explore-top">
+            <h2>Explore Materials <span style="float:right;font-size:16px;">⚙ ☰</span></h2>
+            <div class="explore-search">
+              <span>Find the right sustainable material for your project...</span>
+              <span>📷⚙️</span>
+            </div>
+          </div>
+          <div class="body-scroll" style="padding-top:16px;">
+            <div class="cat-head"><h3>Category</h3><a href="#" onclick="return false;">See All</a></div>
+            <div class="cat-grid">
+              <div class="cat-item" style="background-image:url('assets/kainpanel-tera.png')" onclick="go('screen-explore')"><div class="cat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9 18h6M10 21h4M8 3a4 4 0 118 0c0 3-2 3-2 6H10c0-3-2-3-2-6z"/></svg></div><span>Decorative</span></div>
+              <div class="cat-item" style="background-image:url('https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=300&q=60')" onclick="go('screen-explore')"><div class="cat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 10v4h4l5 5V5L7 10H3z"/><path d="M16 8a5 5 0 010 8"/></svg></div><span>Acoustic</span></div>
+              <div class="cat-item" style="background-image:url('assets/pickup-limbah.png')" onclick="go('screen-explore')"><div class="cat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2v13"/><circle cx="12" cy="18" r="3"/></svg></div><span>Insulation</span></div>
+              <div class="cat-item" style="background-image:url('https://images.unsplash.com/photo-1595515106864-078e731ecb5c?w=300&q=60')" onclick="go('screen-explore')"><div class="cat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M12 3v18M8 8h.01M8 14h.01"/></svg></div><span>Furniture</span></div>
+            </div>
+            <div class="feature-banner">
+              <div><h4>FEATURED MATERIAL</h4><p>Engineered from recycled textile fibers.</p></div>
+            </div>
+            <div class="collection-head"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--forest)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M8 12a4 4 0 018 0M5 12a7 7 0 0114 0"/></svg> Explore Collection <span style="margin-left:auto;">•••</span></div>
+            <div class="mat-grid">
+              <div class="mat-card" onclick="go('screen-detail')">
+                <div class="mat-thumb" style="background-image:url('assets/kainpanel-tera.png')">
+                  <span class="mat-tag">Decorative</span><span class="mat-heart">♡</span>
+                </div>
+                <div class="mat-info"><h5>KainPanel Terra</h5><p>Decorative Panel</p></div>
+              </div>
+              <div class="mat-card" onclick="go('screen-detail')">
+                <div class="mat-thumb" style="background-image:url('https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=300&q=60')">
+                  <span class="mat-tag">Acoustic</span><span class="mat-heart">♡</span>
+                </div>
+                <div class="mat-info"><h5>KainAcoustic Grid</h5><p>Acoustic Panel</p></div>
+              </div>
+              <div class="mat-card" onclick="go('screen-detail')">
+                <div class="mat-thumb" style="background-image:url('assets/pickup-limbah.png')">
+                  <span class="mat-tag">Insulation</span><span class="mat-heart">♡</span>
+                </div>
+                <div class="mat-info"><h5>KainBoard Core</h5><p>Insulation Material</p></div>
+              </div>
+              <div class="mat-card" onclick="go('screen-detail')">
+                <div class="mat-thumb" style="background-image:url('https://images.unsplash.com/photo-1595515106864-078e731ecb5c?w=300&q=60')">
+                  <span class="mat-tag">Furniture</span><span class="mat-heart">♡</span>
+                </div>
+                <div class="mat-info"><h5>KainBoard Furni</h5><p>Furniture Board</p></div>
+              </div>
+            </div>
+            <div class="built-banner">BUILT FOR<br>YOUR PROJECT</div>
+          </div>
+          <div class="bottom-nav" id="nav-explore"></div>
+        </div>
+
+        <!-- ===================== MATERIAL DETAIL ===================== -->
+        <div class="screen" id="screen-detail">
+          <div class="topbar">
+            <div class="with-back">
+              <button class="back-btn" onclick="go('screen-explore')">←</button>
+              <h2 style="flex:1;">Material Detail</h2>
+              <div style="width:34px;"></div>
+            </div>
+          </div>
+          <div class="body-scroll" style="padding-top:16px;">
+            <div class="detail-hero" style="background-image:url('assets/kainpanel-tera.png')">
+              <span class="detail-count">1 / 5</span>
+              <div class="dots"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="detail-title-card">
+              <div>
+                <h2>Decorative<br>Panel</h2>
+                <p>Engineered from recycled textile fibers for modern interior applications.</p>
+              </div>
+              <img src="assets/maskot.png" alt="mascot">
+            </div>
+            <div class="card spec-card">
+              <h4>Specifications</h4>
+              <div class="spec-grid">
+                <div class="spec-item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M8 12c1-3 3-3 4 0s3 3 4 0"/></svg></div><div><b>Material</b><span>Recycled Textile Composite</span></div></div>
+                <div class="spec-item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16l5-9 13 7-5 9z"/><path d="M9 10l2 1M11 6l2 1M13.5 12.5l2 1"/></svg></div><div><b>Dimensions</b><span>120 × 60 cm</span></div></div>
+                <div class="spec-item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></div><div><b>Thickness</b><span>12 mm</span></div></div>
+                <div class="spec-item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 5-3 7.5-7 9-4-1.5-7-4-7-9V6z"/></svg></div><div><b>Strength</b><span>High Performance</span></div></div>
+              </div>
+            </div>
+            <div class="sustain-card">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 19c8 0 13-5 13-13 0 0-13-1-13 8 0 2 1 4 3 5"/></svg></div>
+              <div><b>Sustainability Impact</b><p>Made from recovered textile waste and engineered into high-value material.</p></div>
+            </div>
+            <button class="btn btn-dark btn-row-icon" style="margin-bottom:12px;" onclick="go('screen-waste')"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2" style="vertical-align:-3px;margin-right:6px;"><path d="M5 19c8 0 13-5 13-13 0 0-13-1-13 8 0 2 1 4 3 5"/></svg> Request Sample →</button>
+            <button class="btn btn-outline btn-row-icon" onclick="go('screen-custom-order'); resetStepper();"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--forest)" stroke-width="2" style="vertical-align:-3px;margin-right:6px;"><path d="M6 6l12 12M18 6L6 18"/></svg> Custom Order →</button>
+          </div>
+          <div class="bottom-nav" id="nav-detail"></div>
+        </div>
+
+        <!-- ===================== CUSTOM ORDER ===================== -->
+        <div class="screen" id="screen-custom-order">
+          <div class="topbar"><h2>Custom Order</h2></div>
+          <div class="stepper-row" id="stepperRow"></div>
+          <div class="step-labels">
+            <span>Material</span><span>Spek</span><span>Desain</span><span>Jumlah</span><span>Review</span>
+          </div>
+          <div class="body-scroll" id="coBody" style="padding-top:6px;"></div>
+          <div class="bottom-nav" id="nav-custom"></div>
+        </div>
+
+        <!-- ===================== WASTE DROPOFF ===================== -->
+        <div class="screen" id="screen-waste">
+          <div class="topbar"><h2>Setor Limbah Tekstil</h2></div>
+          <div class="body-scroll" style="padding-top:18px;">
+            <div class="waste-banner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2"><path d="M7 19H4l3-6M17 19h3l-3-6M9 5l3-2 3 2M12 3v6M6 13l-2 4 4 2M18 13l2 4-4 2"/></svg>
+              <img src="assets/maskot.png" alt="mascot">
+              <b>Give Your Textile Waste a Second Life</b>
+            </div>
+            <div class="field-label">Berat Limbah (KG)</div>
+            <input class="input" style="margin-bottom:18px;" type="number" value="40">
+            <div class="field-label">Jenis Kain</div>
+            <div class="cloth-chip-row">
+              <button class="cloth-chip active" onclick="chipSelect(this)">Katun</button>
+              <button class="cloth-chip" onclick="chipSelect(this)">Polyster</button>
+              <button class="cloth-chip" onclick="chipSelect(this)">Denim</button>
+              <button class="cloth-chip" onclick="chipSelect(this)">Mixed</button>
+              <button class="cloth-chip" onclick="chipSelect(this)">Others</button>
+            </div>
+            <div class="field-label">Pickup Location</div>
+            <input class="input" style="margin-bottom:12px;" value="Jalan Kainova No 100">
+            <div class="map-fake">
+              <svg class="route" viewBox="0 0 300 150"><path d="M20,120 C80,140 120,60 160,60 S 230,30 270,30" fill="none" stroke="#c0392b" stroke-width="4" stroke-linecap="round"/><circle cx="20" cy="120" r="7" fill="#c0392b"/><circle cx="270" cy="30" r="7" fill="#3b62c9"/></svg>
+            </div>
+            <div class="field-label">Pickup Date</div>
+            <input class="input" style="margin-bottom:26px;" value="29 Agustus 2026">
+            <button class="btn btn-dark" onclick="go('screen-tracking')">Request Pickup</button>
+          </div>
+          <div class="bottom-nav" id="nav-waste"></div>
+        </div>
+
+        <!-- ===================== ORDER TRACKING ===================== -->
+        <div class="screen" id="screen-tracking">
+          <div class="topbar"><h2>Order Tracking</h2></div>
+          <div class="body-scroll" style="padding-top:18px;">
+            <div class="track-card">
+              <img src="assets/pickup-limbah.png" alt="">
+              <div>
+                <h4>Order #KNV-001</h4>
+                <p>KAINOVA Acoustic Panel</p>
+                <div class="track-meta">
+                  <div><b>50 Unit</b>Quantity</div>
+                  <div><b>30 Ags 2026</b>Estimated</div>
+                </div>
+              </div>
+            </div>
+            <div class="timeline-card">
+              <div class="tl-item"><div class="tl-check"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div><div class="tl-text"><b>Pengajuan Diterima</b><span>28 Agustus 2026, 17.45</span></div></div>
+              <div class="tl-item"><div class="tl-check"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div><div class="tl-text"><b>Sortasi Bahan</b><span>28 Agustus 2026, 20.00</span></div></div>
+              <div class="tl-item"><div class="tl-check"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div><div class="tl-text"><b>Produksi</b><span>29 Agustus 2026, 10.55</span></div></div>
+              <div class="tl-item"><div class="tl-check pending"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div><div class="tl-text"><b>Quality Control</b><span>Menunggu</span></div></div>
+              <div class="tl-item"><div class="tl-check pending"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div><div class="tl-text"><b>Siap Dikirim</b><span>Menunggu</span></div></div>
+              <div class="tl-item"><div class="tl-check pending"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div><div class="tl-text"><b>Selesai</b><span>Menunggu</span></div></div>
+            </div>
+            <div class="notice-pill"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--forest)" stroke-width="2"><path d="M6 8a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6"/></svg> Kami akan mengirimkan notifikasi jika status order berubah</div>
+          </div>
+          <div class="bottom-nav" id="nav-tracking"></div>
+        </div>
+
+        <!-- ===================== CHAT ===================== -->
+        <div class="screen" id="screen-chat">
+          <div class="topbar">
+            <div class="chat-header-info">
+              <div class="with-back">
+                <button class="back-btn" onclick="go('screen-dashboard')">←</button>
+                <div class="who"><b>Kainova Team ✓</b><span>Online</span></div>
+              </div>
+              <div class="chat-icons"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="white" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="white" stroke-width="2"><path d="M22 16.9v2a2 2 0 01-2.2 2A19.8 19.8 0 013 5.2 2 2 0 015 3h2a2 2 0 012 1.7c.1.9.3 1.8.6 2.6a2 2 0 01-.4 2.1L8 10.6a16 16 0 006.4 6.4l1.2-1.2a2 2 0 012.1-.4c.8.3 1.7.5 2.6.6a2 2 0 011.7 2z"/></svg></div>
+            </div>
+          </div>
+          <div class="chat-body" id="chatBody">
+            <div class="bubble me">Halo Kainova Team, Bisa Update Progress Order #KNV-001<time>10.55</time></div>
+            <div class="bubble them">Halo, Berikut Update Terbaru Order Anda<time>11.55</time></div>
+            <div class="bubble them file"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--forest)" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5M8 12h8M8 16h8"/></svg> <span>Production Update #KNV-001.pdf</span></div>
+          </div>
+          <div class="chat-input-bar">
+            <div class="chat-input-inner">
+              <input id="chatInput" placeholder="Type a message...">
+              <button onclick="sendChat()"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+            </div>
+          </div>
+          <div class="bottom-nav" id="nav-chat"></div>
+        </div>
+
+        <!-- ===================== PROFILE ===================== -->
+        <div class="screen" id="screen-profile">
+          <div class="topbar">
+            <div class="with-back">
+              <button class="back-btn" onclick="go('screen-dashboard')">←</button>
+              <h2 style="flex:1;">Profile</h2>
+              <div style="width:34px;"></div>
+            </div>
+          </div>
+          <div class="body-scroll" style="padding-top:6px;">
+            <div class="profile-hero">
+              <div class="avatar-wrap">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=70" alt="avatar">
+                <div class="avatar-edit">✎</div>
+              </div>
+              <h3>Jonathan Patterson</h3>
+              <p>hello@reallygreatsite.com</p>
+            </div>
+            <div class="section-label">General Settings</div>
+            <div class="settings-row"><div class="left"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 109 9 7 7 0 01-9-9z"/></svg></div><div><b>Mode</b><span class="sub">Dark &amp; Light</span></div></div><div class="toggle"></div></div>
+            <div class="settings-row"><div class="left"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="15" r="4"/><path d="M10.5 12.5L20 3M17 6l2 2M14 9l2 2"/></svg></div><b>Change Password</b></div><span class="chev">›</span></div>
+            <div class="settings-row"><div class="left"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></div><b>Language</b></div><span class="chev">›</span></div>
+            <div class="section-label">Information</div>
+            <div class="settings-row"><div class="left"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div><b>About App</b></div><span class="chev">›</span></div>
+            <div class="settings-row"><div class="left"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M9 13h6M9 17h6"/></svg></div><b>Terms &amp; Conditions</b></div><span class="chev">›</span></div>
+            <div class="settings-row"><div class="left"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 5-3 7.5-7 9-4-1.5-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div><b>Privacy Policy</b></div><span class="chev">›</span></div>
+            <div class="settings-row"><div class="left"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg></div><b>Share This App</b></div><span class="chev">›</span></div>
+          </div>
+          <div class="bottom-nav" id="nav-profile"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ Icon strings (inline SVG, currentColor) ============ */
+const iconHome=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>`;
+const iconBellNav=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 004 0"/></svg>`;
+const iconCart=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/><path d="M2 3h2l2.6 12.4a2 2 0 002 1.6h8.6a2 2 0 002-1.6L21 7H6"/></svg>`;
+const iconChatNav=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 9 9 0 01-4-1L3 20l1.2-4.9A8.4 8.4 0 013.6 11 8.4 8.4 0 0112 3a8.7 8.7 0 019 8.5z"/></svg>`;
+const iconProfileNav=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>`;
+const iconUser=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>`;
+const iconFilter=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>`;
+const iconSearch=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`;
+const iconGearMenu=`<span style="float:right;font-size:16px;">⚙ ☰</span>`;
+const iconLamp=`<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M9 18h6M10 21h4M8 3a4 4 0 118 0c0 3-2 3-2 6H10c0-3-2-3-2-6z"/></svg>`;
+const iconSound=`<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M3 10v4h4l5 5V5L7 10H3z"/><path d="M16 8a5 5 0 010 8"/></svg>`;
+const iconTemp=`<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2v13"/><circle cx="12" cy="18" r="3"/></svg>`;
+const iconCabinet=`<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M12 3v18M8 8h.01M8 14h.01"/></svg>`;
+const iconRadio=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--forest)" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M8 12a4 4 0 018 0M5 12a7 7 0 0114 0"/></svg>`;
+const iconThread=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M8 12c1-3 3-3 4 0s3 3 4 0"/></svg>`;
+const iconRuler=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 16l5-9 13 7-5 9z"/><path d="M9 10l2 1M11 6l2 1M13.5 12.5l2 1"/></svg>`;
+const iconLayers=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>`;
+const iconShield=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 5-3 7.5-7 9-4-1.5-7-4-7-9V6z"/></svg>`;
+const iconLeaf=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 19c8 0 13-5 13-13 0 0-13-1-13 8 0 2 1 4 3 5"/></svg>`;
+const iconLeafOutline=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2" style="vertical-align:-3px;margin-right:6px;"><path d="M5 19c8 0 13-5 13-13 0 0-13-1-13 8 0 2 1 4 3 5"/></svg>`;
+const iconX=`<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--forest)" stroke-width="2" style="vertical-align:-3px;margin-right:6px;"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
+const iconRecycle=`<svg viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2"><path d="M7 19H4l3-6M17 19h3l-3-6M9 5l3-2 3 2M12 3v6M6 13l-2 4 4 2M18 13l2 4-4 2"/></svg>`;
+const iconCheck=`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg>`;
+const iconBell=`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--forest)" stroke-width="2"><path d="M6 8a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6"/></svg>`;
+const iconVideo=`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="white" stroke-width="2"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg>`;
+const iconPhone=`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="white" stroke-width="2"><path d="M22 16.9v2a2 2 0 01-2.2 2A19.8 19.8 0 013 5.2 2 2 0 015 3h2a2 2 0 012 1.7c.1.9.3 1.8.6 2.6a2 2 0 01-.4 2.1L8 10.6a16 16 0 006.4 6.4l1.2-1.2a2 2 0 012.1-.4c.8.3 1.7.5 2.6.6a2 2 0 011.7 2z"/></svg>`;
+const iconFile=`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--forest)" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5M8 12h8M8 16h8"/></svg>`;
+const iconSend=`<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>`;
+const iconMode=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 109 9 7 7 0 01-9-9z"/></svg>`;
+const iconKey=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="15" r="4"/><path d="M10.5 12.5L20 3M17 6l2 2M14 9l2 2"/></svg>`;
+const iconLang=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>`;
+const iconPhoneS=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>`;
+const iconDoc=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M9 13h6M9 17h6"/></svg>`;
+const iconShieldCheck=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 5-3 7.5-7 9-4-1.5-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>`;
+const iconShare=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-3.8M8.6 13.4l6.8 3.8"/></svg>`;
+
+/* ============ Bottom nav rendering ============ */
+const navItems = [
+  {id:'home', label:'Home', icon:iconHome, target:'screen-dashboard'},
+  {id:'notif', label:'Notification', icon:iconBellNav, target:'screen-dashboard'},
+  {id:'order', label:'', icon:iconCart, target:'screen-custom-order', fab:true},
+  {id:'chat', label:'Chat', icon:iconChatNav, target:'screen-chat'},
+  {id:'profile', label:'Profile', icon:iconProfileNav, target:'screen-profile'},
+];
+function renderNav(containerId, activeId){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = navItems.map(it=>{
+    if(it.fab){
+      return `<div class="nav-fab" onclick="go('${it.target}'); resetStepper();">${it.icon}</div>`;
+    }
+    return `<button class="nav-item ${it.id===activeId?'active':''}" onclick="go('${it.target}')">${it.icon}<span>${it.label}</span></button>`;
+  }).join('');
+}
+
+/* ============ Screen navigation ============ */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const target = document.getElementById(id);
+  target.classList.add('active');
+  target.scrollTop = 0;
+  const map = {
+    'screen-dashboard':['nav-dashboard','home'],
+    'screen-explore':['nav-explore','home'],
+    'screen-detail':['nav-detail','home'],
+    'screen-custom-order':['nav-custom','order'],
+    'screen-waste':['nav-waste','order'],
+    'screen-tracking':['nav-tracking',''],
+    'screen-chat':['nav-chat','chat'],
+    'screen-profile':['nav-profile','profile'],
+  };
+  if(map[id]) renderNav(map[id][0], map[id][1]);
+}
+function togglePw(){
+  const f = document.getElementById('pwField');
+  f.type = f.type==='password' ? 'text' : 'password';
+}
+function chipSelect(el){
+  el.parentElement.querySelectorAll('.cloth-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+function sendChat(){
+  const input = document.getElementById('chatInput');
+  if(!input.value.trim()) return;
+  const body = document.getElementById('chatBody');
+  const d = new Date();
+  const time = d.getHours().toString().padStart(2,'0')+'.'+d.getMinutes().toString().padStart(2,'0');
+  const b = document.createElement('div');
+  b.className = 'bubble me';
+  b.innerHTML = input.value + `<time>${time}</time>`;
+  body.appendChild(b);
+  input.value='';
+  body.scrollTop = body.scrollHeight;
+}
+
+/* ============ Custom order stepper ============ */
+let coStep = 1;
+let coMaterial = 0;
+const materials = [
+  {name:'Kainova Decorative Panel', thick:'10 MM', img:'assets/kainpanel-tera.png'},
+  {name:'Kainova Acoustic Panel', thick:'10 MM', img:'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=200&q=60'},
+  {name:'Kainova Insulation Panel', thick:'10 MM', img:'assets/pickup-limbah.png'},
+];
+let coQty = 50;
+let coFile = '';
+
+function resetStepper(){ coStep = 1; renderStepper(); }
+
+function renderStepper(){
+  const row = document.getElementById('stepperRow');
+  row.innerHTML = [1,2,3,4,5].map((n,i)=>{
+    const circle = `<div class="step-circle ${n===coStep?'active':''}">${n}</div>`;
+    return i<4 ? circle + `<span class="step-arrow">›</span>` : circle;
+  }).join('');
+
+  const body = document.getElementById('coBody');
+  if(coStep===1){
+    body.innerHTML = `
+      <div class="co-intro"><div><h3>Pilih Material</h3><p>Pilih Material Yang Sesuai Dengan Kebutuhan Proyek Anda</p></div><img src="assets/maskot.png"></div>
+      ${materials.map((m,i)=>`
+        <div class="mat-select ${coMaterial===i?'selected':''}" onclick="coMaterial=${i}; renderStepper();">
+          <img src="${m.img}"><div class="txt"><b>${m.name}</b><br><span>${m.thick}</span></div><div class="radio-dot"></div>
+        </div>`).join('')}
+      <button class="btn btn-sage" style="margin-top:8px;" onclick="coStep=2; renderStepper();">Selanjutnya</button>
+    `;
+  } else if(coStep===2){
+    body.innerHTML = `
+      <div class="co-intro"><div><h3>Spesifikasi</h3><p>Tentukan ukuran dan ketebalan material</p></div><img src="assets/maskot.png"></div>
+      <div class="field-label">Panjang (cm)</div>
+      <input class="input" style="margin-bottom:14px;" value="120">
+      <div class="field-label">Lebar (cm)</div>
+      <input class="input" style="margin-bottom:14px;" value="60">
+      <div class="field-label">Ketebalan</div>
+      <div class="cloth-chip-row" style="margin-bottom:18px;">
+        <button class="cloth-chip active" onclick="chipSelect(this)">10 MM</button>
+        <button class="cloth-chip" onclick="chipSelect(this)">12 MM</button>
+        <button class="cloth-chip" onclick="chipSelect(this)">15 MM</button>
+      </div>
+      <div class="two-btn"><button class="btn btn-outline" onclick="coStep=1; renderStepper();">Kembali</button><button class="btn btn-sage" onclick="coStep=3; renderStepper();">Lanjut</button></div>
+    `;
+  } else if(coStep===3){
+    body.innerHTML = `
+      <div class="co-intro"><div><h3>Upload Desain</h3><p>Unggah Desain Referensi Anda</p></div><img src="assets/maskot.png"></div>
+      <div class="upload-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-4 4-3-3-6 5"/></svg>
+        <h4>Drag &amp; Drop File Here</h4>
+        <span class="or">Atau</span>
+        <label for="fileInput">Pilih File</label>
+        <input type="file" id="fileInput" onchange="coFile=this.files[0]?this.files[0].name:''; renderStepper();">
+        ${coFile ? `<div class="file-name">📎 ${coFile}</div>` : ''}
+      </div>
+      <div class="two-btn"><button class="btn btn-outline" onclick="coStep=2; renderStepper();">Kembali</button><button class="btn btn-sage" onclick="coStep=4; renderStepper();">Lanjut</button></div>
+    `;
+  } else if(coStep===4){
+    body.innerHTML = `
+      <div class="co-intro"><div><h3>Jumlah Pesanan</h3><p>Tentukan jumlah unit yang dibutuhkan</p></div><img src="assets/maskot.png"></div>
+      <div class="qty-box">
+        <b>Jumlah Unit</b>
+        <div class="qty-controls">
+          <button onclick="coQty=Math.max(1,coQty-1); renderStepper();">−</button>
+          <span>${coQty}</span>
+          <button onclick="coQty=coQty+1; renderStepper();">+</button>
+        </div>
+      </div>
+      <div class="field-label">Catatan Tambahan</div>
+      <textarea class="input" placeholder="Tulis catatan untuk tim produksi..."></textarea>
+      <div class="two-btn" style="margin-top:18px;"><button class="btn btn-outline" onclick="coStep=3; renderStepper();">Kembali</button><button class="btn btn-sage" onclick="coStep=5; renderStepper();">Lanjut</button></div>
+    `;
+  } else if(coStep===5){
+    body.innerHTML = `
+      <div class="co-intro"><div><h3>Review Pesanan</h3><p>Periksa kembali detail pesanan Anda</p></div><img src="assets/maskot.png"></div>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="review-row"><b>Material</b><span>${materials[coMaterial].name}</span></div>
+        <div class="review-row"><b>Ketebalan</b><span>10 MM</span></div>
+        <div class="review-row"><b>Dimensi</b><span>120 × 60 cm</span></div>
+        <div class="review-row"><b>Desain</b><span>${coFile || 'Belum diunggah'}</span></div>
+        <div class="review-row" style="border-bottom:none;"><b>Jumlah</b><span>${coQty} Unit</span></div>
+      </div>
+      <div class="two-btn"><button class="btn btn-outline" onclick="coStep=4; renderStepper();">Kembali</button><button class="btn btn-dark" onclick="go('screen-tracking');">Submit Order</button></div>
+    `;
+  }
+}
+
+/* ============ init ============ */
+renderNav('nav-dashboard','home');
+renderStepper();
+</script>
+</body>
+</html>
